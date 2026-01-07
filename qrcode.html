@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二维码生成器</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .qrcode-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        #qrcode {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        #qrcode img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .qrcode-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        
+        @media (max-width: 480px) {
+            .qrcode-container {
+                padding: 1rem;
+                margin: 1rem;
+            }
+            
+            .qrcode-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>作品投票系统 - 二维码生成器</h1>
+        <nav>
+            <a href="index.html">投票首页</a>
+            <a href="admin.html">后台管理</a>
+            <a href="qrcode.html">二维码生成</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="qrcode-container">
+            <h2>生成网站访问二维码</h2>
+            <form id="qrcode-form" onsubmit="generateQRCode(); return false;">
+                <div class="form-group">
+                    <label for="website-url">网站访问URL</label>
+                    <input type="url" id="website-url" name="website-url" required placeholder="请输入您部署后的网站URL，例如：https://example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="qrcode-size">二维码尺寸</label>
+                    <select id="qrcode-size" name="qrcode-size">
+                        <option value="200">200x200像素</option>
+                        <option value="300" selected>300x300像素</option>
+                        <option value="400">400x400像素</option>
+                        <option value="500">500x500像素</option>
+                    </select>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">生成二维码</button>
+                    <button type="button" class="cancel-btn" onclick="clearQRCode()">清空</button>
+                </div>
+            </form>
+            
+            <div id="qrcode-result" style="display: none;">
+                <h3>生成结果</h3>
+                <div id="qrcode"></div>
+                <div class="qrcode-actions">
+                    <button class="submit-btn" onclick="downloadQRCode()">下载二维码</button>
+                    <button class="submit-btn" onclick="printQRCode()">打印二维码</button>
+                </div>
+            </div>
+            
+            <div id="qrcode-message" class="message"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 作品投票系统. 保留所有权利.</p>
+    </footer>
+
+    <script>
+        // 生成二维码
+        function generateQRCode() {
+            const url = document.getElementById('website-url').value;
+            const size = document.getElementById('qrcode-size').value;
+            const qrcodeDiv = document.getElementById('qrcode');
+            const resultDiv = document.getElementById('qrcode-result');
+            const messageDiv = document.getElementById('qrcode-message');
+            
+            // 验证URL
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                showMessage('请输入有效的URL，必须以http://或https://开头', 'error');
+                return;
+            }
+            
+            // 清空之前的二维码
+            qrcodeDiv.innerHTML = '';
+            
+            // 显示加载状态
+            qrcodeDiv.innerHTML = '<div class="loading"></div>';
+            
+            // 使用草料二维码生成器API
+            try {
+                // 构建草料二维码生成URL
+                // 注意：草料二维码生成器提供了免费的在线生成服务
+                // 这里使用其公开的生成接口
+                const cliImUrl = `https://cli.im/api/qrcode/create?text=${encodeURIComponent(url)}&size=${size}`;
+                
+                // 创建图片元素
+                const img = document.createElement('img');
+                img.src = cliImUrl;
+                img.alt = '投票网站二维码';
+                img.onload = function() {
+                    // 图片加载成功
+                    qrcodeDiv.innerHTML = '';
+                    qrcodeDiv.appendChild(img);
+                    resultDiv.style.display = 'block';
+                    showMessage('二维码生成成功！', 'success');
+                };
+                img.onerror = function() {
+                    // 图片加载失败，使用备用方案
+                    qrcodeDiv.innerHTML = '';
+                    showMessage('二维码生成失败，正在尝试备用方案...', 'error');
+                    
+                    // 备用方案：使用QRCode.js库
+                    fallbackQRCode(url, size, qrcodeDiv, resultDiv, messageDiv);
+                };
+                
+                // 添加到页面
+                qrcodeDiv.appendChild(img);
+            } catch (error) {
+                showMessage('生成二维码失败：' + error.message, 'error');
+                // 备用方案
+                fallbackQRCode(url, size, qrcodeDiv, resultDiv, messageDiv);
+            }
+        }
+        
+        // 备用二维码生成方案（使用QRCode.js）
+        function fallbackQRCode(url, size, qrcodeDiv, resultDiv, messageDiv) {
+            // 使用QRCode.js生成二维码（外部库，通过CDN引入）
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
+            script.onload = function() {
+                QRCode.toCanvas(qrcodeDiv, url, {
+                    width: parseInt(size),
+                    margin: 1,
+                    color: {
+                        dark: '#000000',
+                        light: '#ffffff'
+                    }
+                }, function (error) {
+                    if (error) {
+                        showMessage('生成二维码失败：' + error.message, 'error');
+                        return;
+                    }
+                    
+                    resultDiv.style.display = 'block';
+                    showMessage('二维码生成成功！', 'success');
+                });
+            };
+            document.body.appendChild(script);
+        }
+        
+        // 显示消息
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('qrcode-message');
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+        }
+        
+        // 清空二维码
+        function clearQRCode() {
+            document.getElementById('qrcode-form').reset();
+            document.getElementById('qrcode-result').style.display = 'none';
+            document.getElementById('qrcode-message').textContent = '';
+            document.getElementById('qrcode-message').className = 'message';
+        }
+        
+        // 下载二维码
+        function downloadQRCode() {
+            const qrcodeDiv = document.getElementById('qrcode');
+            const img = qrcodeDiv.querySelector('img');
+            const canvas = qrcodeDiv.querySelector('canvas');
+            
+            if (img) {
+                // 如果是图片元素
+                const link = document.createElement('a');
+                link.href = img.src;
+                link.download = 'qrcode.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else if (canvas) {
+                // 如果是canvas元素（备用方案）
+                const url = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'qrcode.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+        
+        // 打印二维码
+        function printQRCode() {
+            const printContent = document.getElementById('qrcode').innerHTML;
+            const originalContent = document.body.innerHTML;
+            
+            document.body.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <h2>作品投票系统</h2>
+                    ${printContent}
+                    <p style="margin-top: 1rem;">扫描二维码访问投票页面</p>
+                </div>
+            `;
+            
+            window.print();
+            document.body.innerHTML = originalContent;
+            
+            // 重新生成二维码（因为我们替换了整个body）
+            generateQRCode();
+        }
+    </script>
+</body>
+</html>

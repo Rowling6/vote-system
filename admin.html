@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台管理系统</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 登录界面 -->
+    <div id="login-section" class="auth-section">
+        <div class="login-container">
+            <h2>后台管理系统</h2>
+            <form id="login-form" onsubmit="return login()">
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" id="username" name="username" required placeholder="请输入用户名">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" name="password" required placeholder="请输入密码">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">登录</button>
+                </div>
+                
+                <div id="login-message" class="message"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 后台管理面板 -->
+    <div id="admin-panel" class="admin-section" style="display: none;">
+        <header class="admin-header">
+            <h2>后台管理面板</h2>
+            <div class="admin-nav">
+                <span id="welcome-message"></span>
+                <button class="logout-btn" onclick="logout()">退出登录</button>
+            </div>
+        </header>
+
+        <main class="admin-main">
+            <!-- 评价数据统计 -->
+            <section class="stats-section">
+                <h3>评价数据统计</h3>
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <h4>总投票数</h4>
+                        <p id="total-votes">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>平均评分</h4>
+                        <p id="average-score">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>最高评分</h4>
+                        <p id="max-score">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>最低评分</h4>
+                        <p id="min-score">0</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 筛选和排序 -->
+            <section class="filter-section">
+                <h3>筛选和排序</h3>
+                <div class="filter-container">
+                    <div class="filter-group">
+                        <label for="work-filter">作品筛选</label>
+                        <select id="work-filter" onchange="filterAndSortVotes()">
+                            <option value="all">所有作品</option>
+                            <option value="1">作品名称 1</option>
+                            <option value="2">作品名称 2</option>
+                            <option value="3">作品名称 3</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="sort-by">排序方式</label>
+                        <select id="sort-by" onchange="filterAndSortVotes()">
+                            <option value="date-desc">按时间倒序</option>
+                            <option value="date-asc">按时间正序</option>
+                            <option value="score-desc">按分数倒序</option>
+                            <option value="score-asc">按分数正序</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="score-range">分数范围</label>
+                        <input type="range" id="score-range" min="0" max="100" value="100" oninput="updateScoreRange()">
+                        <span id="score-range-value">0-100</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 评价数据列表 -->
+            <section class="votes-section">
+                <h3>评价数据列表</h3>
+                <div class="votes-container" id="votes-container">
+                    <!-- 评价数据将通过JavaScript动态生成 -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

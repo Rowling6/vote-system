@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作品投票系统</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>作品投票系统</h1>
+        <nav>
+            <a href="index.html">投票首页</a>
+            <a href="admin.html">后台管理</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- 作品展示区域 -->
+        <section class="works-section">
+            <h2>待投票作品</h2>
+            <div class="works-container">
+                <!-- 作品卡片 -->
+                <div class="work-card" data-work-id="1">
+                    <div class="work-image">
+                        <img src="https://picsum.photos/300/200?random=1" alt="作品1" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICA8cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPgogIDx0ZXh0IHg9IjE1MCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiMzMzMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+5Lq65piv5LiA5LiqMSIvPgo8L2c+Cjwvc3ZnPg=='">
+                    </div>
+                    <div class="work-info">
+                        <h3>作品名称 1</h3>
+                        <p>作者：张三</p>
+                        <p>作品描述：这是一个优秀的作品展示，展示了作者的创意和技术能力。</p>
+                        <button class="vote-btn" onclick="openVoteForm(1)">进行投票</button>
+                    </div>
+                </div>
+
+                <div class="work-card" data-work-id="2">
+                    <div class="work-image">
+                        <img src="https://picsum.photos/300/200?random=2" alt="作品2" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICA8cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPgogIDx0ZXh0IHg9IjE1MCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiMzMzMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+5Lq65piv5LiA5LiqMiIvPgo8L2c+Cjwvc3ZnPg=='">
+                    </div>
+                    <div class="work-info">
+                        <h3>作品名称 2</h3>
+                        <p>作者：李四</p>
+                        <p>作品描述：这是另一个精彩的作品，展现了作者的独特视角和创新思维。</p>
+                        <button class="vote-btn" onclick="openVoteForm(2)">进行投票</button>
+                    </div>
+                </div>
+
+                <div class="work-card" data-work-id="3">
+                    <div class="work-image">
+                        <img src="https://picsum.photos/300/200?random=3" alt="作品3" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICA8cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPgogIDx0ZXh0IHg9IjE1MCIgeT0iMTAwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiMzMzMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSI+5Lq65piv5LiA5LiqMyIvPgo8L2c+Cjwvc3ZnPg=='">
+                    </div>
+                    <div class="work-info">
+                        <h3>作品名称 3</h3>
+                        <p>作者：王五</p>
+                        <p>作品描述：这是一个富有创意的作品，体现了作者的专业素养和艺术表现力。</p>
+                        <button class="vote-btn" onclick="openVoteForm(3)">进行投票</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 投票表单弹窗 -->
+        <div id="vote-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeVoteForm()">&times;</span>
+                <h2>作品投票</h2>
+                <form id="vote-form" onsubmit="return submitVote()">
+                    <input type="hidden" id="work-id" name="work-id">
+                    
+                    <div class="form-group">
+                        <label for="voter-name">投票人姓名 *</label>
+                        <input type="text" id="voter-name" name="voter-name" required placeholder="请输入您的姓名">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="score">评分 (0-100分) *</label>
+                        <div class="score-input">
+                            <input type="number" id="score" name="score" min="0" max="100" step="1" required placeholder="请输入分数">
+                            <div class="score-display">
+                                <span id="score-value">50</span>分
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="comment">详细评价</label>
+                        <textarea id="comment" name="comment" rows="5" placeholder="请输入您的评价..."></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="cancel-btn" onclick="closeVoteForm()">取消</button>
+                        <button type="submit" class="submit-btn">提交投票</button>
+                    </div>
+                </form>
+                <div id="vote-message" class="message"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 作品投票系统. 保留所有权利.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
